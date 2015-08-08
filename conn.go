@@ -1,7 +1,6 @@
 package recipes
 
 import (
-	"log"
 	"errors"
 	"fmt"
 	gozk "launchpad.net/gozk"
@@ -23,7 +22,6 @@ func GetPanicingZk(url string) *ZkConn {
 }
 
 func WaitOnConnect(zkEventChan <-chan gozk.Event) {
-	log.Println("waiting on zookeeper connection...")
 	for {
 		event := <-zkEventChan
 		if !event.Ok() {
@@ -38,10 +36,7 @@ func WaitOnConnect(zkEventChan <-chan gozk.Event) {
 				panic("Zookeeper auth failed!")
 			case gozk.STATE_CLOSED:
 				panic("zookeeper connection closed!")
-			case gozk.STATE_CONNECTING:
-				log.Println("-> zookeeper connecting...")
 			case gozk.STATE_CONNECTED:
-				log.Println("-> zookeeper connected.")
 				return
 			}
 		}

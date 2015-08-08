@@ -2,11 +2,10 @@ package recipes
 
 import (
 	"errors"
-	"path"
 	gozk "launchpad.net/gozk"
+	"path"
 	"sort"
 	"strings"
-	"log"
 )
 
 /** From http://zookeeper.apache.org/doc/r3.1.2/recipes.html#sc_recipes_Locks
@@ -126,7 +125,7 @@ func (m *RWMutex) Unlock() error {
 
 func rlock(conn *gozk.Conn, basePath, prefix string, checkPrefix []string) (lock string, err error) {
 	// step 1
-	lock, err = conn.Create(path.Join(basePath, prefix), "", gozk.EPHEMERAL | gozk.SEQUENCE,
+	lock, err = conn.Create(path.Join(basePath, prefix), "", gozk.EPHEMERAL|gozk.SEQUENCE,
 		gozk.WorldACL(gozk.PERM_ALL))
 	if err != nil {
 		return lock, err
@@ -157,7 +156,6 @@ func rlock(conn *gozk.Conn, basePath, prefix string, checkPrefix []string) (lock
 		sort.Strings(filteredChildrenKeys)
 		prevLock := ""
 		for _, seqNum := range filteredChildrenKeys {
-			log.Printf("CHECKING SEQ %s: %s == %s", seqNum, path.Base(lock), filteredChildren[seqNum])
 			if path.Base(lock) == filteredChildren[seqNum] {
 				break
 			}
